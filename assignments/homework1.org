@@ -1,6 +1,7 @@
+
 #+TITLE:     Homework 1 - Due 9/6/2012
-#+AUTHOR:    John Kitchin
-#+EMAIL:     jkitchin@cmu.edu
+#+AUTHOR:    Steven Illes
+#+EMAIL:     silles@andrew.cmu.edu
 #+DATE:      2012-09-01 Sat
 #+DESCRIPTION:
 #+KEYWORDS:
@@ -18,7 +19,7 @@
 Instructions: All calculations should be performed in python. You should turn in the code used, and the answers you got.
 
 * Signup for an account at gitHub.
-Print your username here:
+Print your username here: Smilles
 
 Set yourself up to [[http://www.quora.com/GitHub/What-does-it-mean-to-watch-in-GitHub][watch]]
 https://github.com/jkitchin/dft-course and
@@ -42,8 +43,74 @@ Fit a cubic polynomial to this set of data and estimate the lattice constant tha
 |                      3.7 |         -3.711284 |
 |                     3.75 |          -3.68426 |
 
+Answer Code
+
+#!/usr/bin/env python
+import numpy as np
+import matplotlib.pyplot as plt
+A=[3.5,3.55,3.6,3.65,3.7,3.75]
+eV=[-3.649238,-3.696204,-3.719946,-3.723951,-3.711284,-3.68426]
+p=np.polyfit(A,eV,3)
+dp=np.polyder(p)
+r=np.roots(dp)
+x=np.linspace(3.5,3.75)
+y=np.polyval(p,x)
+plt.plot(x,y)
+plt.plot(A,eV,'o')
+plt.plot(r[1],np.polyval(p,r[1]),'o')
+plt.xlabel('Lattice Constant (A)')
+plt.ylabel('Total Energy (eV)')
+plt.legend('FRM',loc='best')
+plt.title('Problem 4, HW 1')
+plt.savefig('HW1, Problem 4')
+plt.show()
+print 'Minimum Energy at A='
+print r[1]
+
+Response:
+Minimum Energy at A=
+3.63579751533
+
+[[file:HW1, Problem 4.png]]
+
 * Nonlinear algebra
 Solve this equation: $\sin(x^2) = 0.5$ for $x$. Prepare a plot of the function and show where your solution is. Hint: =scipy.optimize.fsolve=
+
+Answer Code
+
+#!/usr/bin/env python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import fsolve
+
+def f(x):
+    y=0.5-np.sin(x**2)
+    return y
+m=np.linspace(0,2*np.pi)
+k=[1,2,2.5,3,3.5,3.9,4.3,4.6,5,5.2,5.6,5.9,6.2]
+g=[0,0,0,0,0,0,0,0,0,0,0,0,0]
+p=np.linspace(0,0)
+x=fsolve(f, k)
+n=0.5-np.sin(m**2)
+plt.plot(m,n)
+plt.plot(x,g,'o')
+plt.xlabel('Value of X')
+plt.ylabel('Value of Y')
+plt.title('Homework 1 Problem 5')
+plt.legend('FS',loc='best')
+plt.show()
+print 'x='
+print x
+plt.savefig('Homework 1 Problem 5')
+
+
+Response
+x=
+[ 0.72360124  1.6180216   2.60898143  2.9834844   3.61800627  3.89671201
+  4.4014946   4.63330873  5.06520878  5.26789665  5.65150646  5.83385982
+  6.18245183]
+
+[[file:Homework 1 Problem 5.png]]
 
 * Linear algebra
 Solve these equations using python and linear algebra:
@@ -56,3 +123,36 @@ a0 + 2a1 + 4 a2 + 8 a3 = 1
 \end{eqnarray}
 
 Use linear algebra to verify your solution. Hint: see =numpy.linalg=, =numpy.dot=.
+
+Answer Code:
+
+#!/usr/bin/env python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import fsolve
+import numpy.linalg as la
+
+A=([1,-3,9,-27],[1,-1,1,-1],[1,1,1,1],[1,2,4,8])
+B=([-2,2,5,1])
+m=la.solve(A,B)
+
+print 'a0='
+print m[0]
+print 'a1='
+print m[1]
+print 'a2='
+print m[2]
+print 'a3='
+print m[3]
+
+Response
+
+a0=
+4.65
+a1=
+1.841666666667
+a2=
+-1.15
+a3=
+-.341666666667
+
